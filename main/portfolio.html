@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Santiago Borda — Portfolio</title>
+<meta name="description" content="Santiago Borda — Ingeniería en Sistemas, QA, auditoría de procesos y desarrollo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12161C;
+    --panel:#181D26;
+    --panel-2:#1C222C;
+    --card:#20262F;
+    --border:rgba(236,237,233,0.10);
+    --border-strong:rgba(236,237,233,0.22);
+    --paper:#ECEDE9;
+    --muted:#8C93A1;
+    --accent:#E3A548;
+    --accent-blue:#5B90D9;
+    --accent-green:#5EA88A;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;scroll-padding-top:80px;}
+  body{
+    margin:0;
+    background:var(--panel);
+    color:var(--paper);
+    font-family:'Space Grotesk',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--paper);text-decoration:none;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  ::selection{background:var(--accent);color:var(--ink);}
+
+  /* Franja de apertura */
+  .stripe{width:100%;height:3px;display:flex;}
+  .stripe span{flex:1;}
+  .stripe span:nth-child(1){background:var(--accent);}
+  .stripe span:nth-child(2){background:var(--accent-blue);}
+  .stripe span:nth-child(3){background:var(--accent-green);}
+
+  /* Nav */
+  nav{
+    position:sticky;top:0;z-index:20;width:100%;
+    background:rgba(24,29,38,0.85);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);
+    display:flex;justify-content:space-between;align-items:center;
+    padding:18px clamp(24px,6vw,72px);
+  }
+  nav .brand{font-size:15px;font-weight:600;}
+  nav .links{display:flex;gap:30px;}
+  nav .links a{
+    position:relative;font-size:14px;color:var(--muted);
+    padding-bottom:4px;transition:color .3s ease;
+  }
+  nav .links a::after{
+    content:"";position:absolute;left:0;bottom:0;width:0;height:1px;
+    background:var(--accent);transition:width .3s ease;
+  }
+  nav .links a:hover{color:var(--paper);}
+  nav .links a:hover::after{width:100%;}
+
+  section, header, footer{
+    width:100%;box-sizing:border-box;
+    padding:88px clamp(24px,6vw,72px);
+  }
+  .wrap{max-width:920px;margin:0 auto;}
+  h2{margin:0 0 44px;font-size:22px;font-weight:600;}
+  .section-border{border-top:1px solid var(--border);}
+
+  /* Hero */
+  header{max-width:none;padding-top:clamp(72px,10vw,120px);}
+  header .wrap{max-width:920px;}
+  .status-line{display:flex;align-items:center;gap:8px;margin-bottom:26px;}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--accent-green);
+       box-shadow:0 0 0 4px rgba(94,168,138,0.15);}
+  h1{margin:0 0 24px;font-size:clamp(38px,6vw,60px);font-weight:600;line-height:1.1;letter-spacing:-0.01em;}
+  .lede{margin:0 0 34px;font-size:18px;line-height:1.7;color:var(--muted);max-width:620px;}
+  .hero-links{display:flex;gap:24px;flex-wrap:wrap;}
+
+  /* Botones / links con subrayado animado + efecto magnético */
+  .link-anim{
+    position:relative;font-size:14px;padding-bottom:2px;
+    border-bottom:1px solid var(--border-strong);
+    transition:color .25s ease, border-color .25s ease, transform .2s ease;
+    display:inline-block;
+  }
+  .link-anim:hover{color:var(--accent);border-color:var(--accent);transform:translateY(-2px);}
+
+  /* Experiencia */
+  .role{display:flex;gap:32px;padding-bottom:38px;margin-bottom:38px;border-bottom:1px solid var(--border);}
+  .role:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+  .role .when{width:120px;flex-shrink:0;font-size:13px;color:var(--muted);padding-top:3px;}
+  .role .title{font-size:17px;font-weight:600;margin-bottom:4px;}
+  .role .org{font-size:14px;color:var(--accent);margin-bottom:14px;}
+  .role ul{margin:0;padding-left:18px;color:var(--muted);font-size:15px;line-height:1.8;}
+
+  /* Proyectos */
+  #proyectos{background:var(--panel-2);}
+  .grid{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;
+    background:var(--border);border:1px solid var(--border);
+  }
+  @media (max-width:720px){ .grid{grid-template-columns:1fr;} }
+  .card{
+    background:var(--card);padding:30px;
+    transition:transform .35s cubic-bezier(.2,.7,.3,1), background .35s ease, box-shadow .35s ease;
+    position:relative;overflow:hidden;
+  }
+  .card:hover{transform:translateY(-4px);background:#242B36;box-shadow:0 18px 32px -20px rgba(0,0,0,0.6);}
+  .card .tag{font-size:11px;letter-spacing:.02em;}
+  .card .name{font-size:17px;font-weight:600;margin:12px 0 10px;}
+  .card p{margin:0;font-size:14px;line-height:1.7;color:var(--muted);}
+  .card .see{display:inline-block;margin-top:14px;font-size:13px;}
+  .tag-blue{color:var(--accent-blue);} .tag-green{color:var(--accent-green);} .tag-amber{color:var(--accent);}
+  .card.blue{border-top:3px solid var(--accent-blue);}
+  .card.green{border-top:3px solid var(--accent-green);}
+  .card.amber{border-top:3px solid var(--accent);}
+
+  /* Stack */
+  .cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:32px;}
+  @media (max-width:720px){ .cols{grid-template-columns:1fr 1fr;} }
+  .cols h4{font-size:12px;color:var(--muted);margin:0 0 14px;font-weight:500;}
+  .cols div p{font-size:15px;line-height:2;margin:0;}
+
+  /* Educación */
+  .edu{display:grid;grid-template-columns:1fr 1fr;gap:44px;}
+  @media (max-width:720px){ .edu{grid-template-columns:1fr;} }
+  .edu .deg{font-size:16px;font-weight:600;margin-bottom:4px;}
+  .edu .inst,.edu .yr{font-size:13px;color:var(--muted);}
+
+  /* Contacto */
+  footer{border-top:1px solid var(--border);}
+  footer h2{max-width:480px;line-height:1.3;font-size:28px;}
+  .contact-links{display:flex;gap:28px;flex-wrap:wrap;margin-bottom:54px;}
+  .contact-links a{font-size:15px;}
+
+  /* Reveal on scroll */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.6,.2,1), transform .7s cubic-bezier(.2,.6,.2,1);}
+  .reveal.is-visible{opacity:1;transform:translateY(0);}
+
+  /* Cursor glow que sigue el mouse dentro de elementos interactivos */
+  .glow-target{position:relative;}
+  .glow-target::before{
+    content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+    background:radial-gradient(160px circle at var(--mx,50%) var(--my,50%), rgba(227,165,72,0.10), transparent 60%);
+    opacity:0;transition:opacity .3s ease;
+  }
+  .glow-target:hover::before{opacity:1;}
+
+  /* Iconos de redes (LinkedIn / GitHub) */
+  .icon-link{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:14px;padding-bottom:2px;
+    border-bottom:1px solid var(--border-strong);
+    transition:color .25s ease, border-color .25s ease, transform .2s ease;
+  }
+  .icon-link svg{width:16px;height:16px;flex-shrink:0;transition:transform .3s ease;}
+  .icon-link:hover{color:var(--accent);border-color:var(--accent);transform:translateY(-2px);}
+  .icon-link:hover svg{transform:scale(1.12);}
+
+  /* Monogramas de institución/empresa */
+  .brand-badge{
+    width:34px;height:34px;flex-shrink:0;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--card);border:1px solid var(--border);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;
+    letter-spacing:.01em;
+  }
+  .brand-logo{height:34px;width:auto;flex-shrink:0;display:block;}
+  .brand-logo.kiu{height:30px;}
+  .brand-logo.bordevs{height:26px;}
+  .role .org-line{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+  .role .org-line .org{margin-bottom:0;}
+  .edu .inst-line{display:flex;align-items:center;gap:10px;margin-bottom:2px;}
+
+  /* Botón de certificado */
+  .cert-btn{
+    display:inline-flex;align-items:center;gap:8px;margin-top:14px;
+    font-size:12px;padding:8px 14px;border-radius:6px;
+    border:1px solid var(--border-strong);color:var(--paper);
+    transition:color .25s ease, border-color .25s ease, background .25s ease, transform .2s ease;
+  }
+  .cert-btn svg{width:14px;height:14px;flex-shrink:0;}
+  .cert-btn:hover{color:var(--accent);border-color:var(--accent);background:rgba(227,165,72,0.08);transform:translateY(-2px);}
+</style>
+</head>
+<body>
+
+<div class="stripe"><span></span><span></span><span></span></div>
+
+<nav>
+  <a href="#top" class="brand">Santiago Borda</a>
+  <div class="links">
+    <a href="#experiencia">Experiencia</a>
+    <a href="#proyectos">Proyectos</a>
+    <a href="#stack">Stack</a>
+    <a href="#educacion">Educación</a>
+    <a href="#contacto">Contacto</a>
+  </div>
+</nav>
+
+<header id="top">
+  <div class="wrap reveal">
+    <div class="status-line">
+      <span class="dot"></span>
+      <span class="mono" style="font-size:13px;color:var(--muted);">Trainee de Mejora Continua — Performance and Delivery, KIU System Solutions</span>
+    </div>
+    <h1>Ingeniería, calidad y procesos que sostienen sistemas críticos.</h1>
+    <p class="lede">Estudiante avanzado de Ingeniería en Sistemas de la Información, con experiencia aplicada en aseguramiento de calidad, auditoría de procesos y automatización. Trabajo hoy en la industria aeronáutica combinando gestión de proyectos, auditoría ITSM y documentación de testing con desarrollo propio de software.</p>
+    <div class="hero-links">
+      <a class="icon-link" href="https://www.linkedin.com/in/santiago-borda-573a51395/">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+        LinkedIn
+      </a>
+      <a class="icon-link" href="https://github.com/santiago-borda">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.19c0 4.49 2.87 8.3 6.84 9.64.5.1.68-.22.68-.49 0-.24-.01-1.03-.01-1.87-2.78.51-3.5-.7-3.72-1.34-.13-.33-.68-1.34-1.16-1.61-.4-.22-.97-.76-.01-.77.9-.02 1.54.85 1.76 1.2 1.03 1.76 2.67 1.26 3.32.96.1-.76.4-1.26.73-1.55-2.55-.29-5.23-1.31-5.23-5.82 0-1.28.44-2.34 1.16-3.16-.12-.29-.5-1.48.11-3.08 0 0 .95-.31 3.12 1.21a10.6 10.6 0 0 1 2.84-.39c.96 0 1.93.13 2.84.39 2.17-1.53 3.12-1.21 3.12-1.21.61 1.6.23 2.79.11 3.08.72.82 1.16 1.87 1.16 3.16 0 4.52-2.69 5.53-5.25 5.82.42.37.78 1.09.78 2.2 0 1.59-.01 2.87-.01 3.26 0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.19C22 6.58 17.52 2 12 2z"/></svg>
+        GitHub
+      </a>
+      <a class="link-anim" href="mailto:santiaborda@gmail.com">santiaborda@gmail.com</a>
+    </div>
+  </div>
+</header>
+
+<section id="experiencia" class="section-border">
+  <div class="wrap">
+    <h2 class="reveal">Experiencia</h2>
+
+    <div class="role reveal">
+      <div class="when mono">Jun 2026 — actual</div>
+      <div>
+        <div class="title">Trainee de Mejora Continua</div>
+        <div class="org-line">
+          <img class="brand-logo kiu" src="assets/kiu-logo.png" alt="Logo de KIU System Solutions">
+          <div class="org">KIU System Solutions — Performance and Delivery</div>
+        </div>
+        <ul>
+          <li>Gestión de proyectos internos como Project Manager, coordinando entregas entre equipos técnicos y de negocio.</li>
+          <li>Auditoría de procesos (PyP), incluyendo el proceso de Gestión de Incidentes.</li>
+          <li>Redacción de documentación de testing para el equipo de QA, facilitando la trazabilidad y cobertura de pruebas de software.</li>
+          <li>Lideré como PM la integración del bot Kiut (OnService) y los cambios estéticos del sitio <a class="link-anim" href="https://www.kiusys.com/" target="_blank" rel="noopener noreferrer" style="font-size:inherit;color:var(--paper);">kiusys.com</a>, coordinando reuniones, seguimiento y referentes.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role reveal">
+      <div class="when mono">Anterior</div>
+      <div>
+        <div class="title">Desarrollador Frontend y QA</div>
+        <div class="org-line">
+          <img class="brand-logo" src="assets/calificadas-logo.png" alt="Logo de Calificadas App">
+          <div class="org">Calificadas SRL — Práctica Profesional</div>
+        </div>
+        <ul>
+          <li>Desarrollo frontend de la aplicación, diseñando funcionalidades que integran módulos basados en IA para potenciar la experiencia de usuario.</li>
+          <li>Uso de servicios de Azure, como Azure Speech y Video Indexer, para procesar y analizar contenido de voz y video dentro del producto.</li>
+          <li>Colaboración directa con el equipo de Producto asegurando la escalabilidad del código.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="proyectos" class="section-border">
+  <div class="wrap">
+    <h2 class="reveal">Proyectos</h2>
+    <p class="reveal" style="margin:-24px 0 44px;font-size:15px;color:var(--muted);max-width:560px;">Trabajos propios y académicos en investigación aplicada, calidad y desarrollo.</p>
+
+    <div class="grid">
+      <div class="card blue reveal glow-target">
+        <span class="mono tag tag-blue">Proyecto final de grado</span>
+        <div class="name">Sistema experto para validación clínica</div>
+        <p>Investigación aplicada de inteligencia artificial a la validación de infecciones transmisibles por transfusión en bancos de sangre, combinando reglas expertas con modelos de lenguaje.</p>
+        <!-- ADD: link al repositorio o documento del PFG -->
+      </div>
+
+      <div class="card green reveal glow-target">
+        <span class="mono tag tag-green">QA</span>
+        <div class="name">Automatización de testing E2E</div>
+        <p>Suite de pruebas end-to-end con Playwright sobre flujos críticos de navegación, reduciendo los ciclos manuales de validación previos a cada release.</p>
+        <!-- ADD: link al repositorio -->
+      </div>
+
+      <div class="card amber reveal glow-target">
+        <span class="mono tag tag-amber">Desarrollo</span>
+        <div class="name">Catálogo web dinámico</div>
+        <p>Plataforma con gestión de stock en tiempo real y arquitectura de datos pensada para escalar a múltiples canales de venta.</p>
+        <a class="link-anim see" href="https://catalogo-tech-ctes.vercel.app/">Ver proyecto</a>
+      </div>
+
+      <div class="card blue reveal glow-target">
+        <span class="mono tag tag-blue">Interdisciplinario</span>
+        <div class="name">FonoApp</div>
+        <p>Prototipo funcional gamificado para terapia fonoaudiológica pediátrica, traduciendo necesidades clínicas a una solución de software concreta.</p>
+        <!-- ADD: link al repositorio o demo -->
+      </div>
+
+      <div class="card green reveal glow-target">
+        <span class="mono tag tag-green">Seguridad</span>
+        <div class="name">Auditoría de seguridad</div>
+        <p>Evaluación de protocolos SSL/TLS y RSA para una institución médica, con foco en mejorar la seguridad de su red.</p>
+        <!-- ADD: link al informe (si es público) -->
+      </div>
+
+      <div class="card amber reveal glow-target">
+        <span class="mono tag tag-amber">En desarrollo</span>
+        <div class="name"><img class="brand-logo bordevs" src="assets/bordevs-logo.png" alt="BorDevs"></div>
+        <p>Marca personal y laboratorio de software propio, explorando automatización, desarrollo web y diseño de producto.</p>
+        <!-- ADD: link cuando esté publicado -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stack" class="section-border">
+  <div class="wrap">
+    <h2 class="reveal">Stack técnico</h2>
+    <div class="cols reveal">
+      <div>
+        <h4 class="mono">Lenguajes</h4>
+        <p>Python<br>JavaScript<br>SQL</p>
+      </div>
+      <div>
+        <h4 class="mono">QA e infraestructura</h4>
+        <p>Playwright<br>Docker<br>Entornos virtuales</p>
+      </div>
+      <div>
+        <h4 class="mono">Herramientas</h4>
+        <p>Cursor<br>VS Code<br>Figma<br>Framer<br>Jira</p>
+      </div>
+      <div>
+        <h4 class="mono">Análisis</h4>
+        <p>Modelado estadístico<br>Excel y Sheets avanzado</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="educacion" class="section-border">
+  <div class="wrap">
+    <h2 class="reveal">Educación e idiomas</h2>
+    <div class="edu reveal">
+      <div>
+        <div class="deg" style="color:var(--accent-blue);">Ingeniería en Sistemas de la Información</div>
+        <div class="inst-line">
+          <img class="brand-logo" style="height:28px;" src="assets/ucp-logo.png" alt="Logo de la Universidad de la Cuenca del Plata">
+          <div class="inst mono">Universidad de la Cuenca del Plata</div>
+        </div>
+        <div class="yr mono" style="margin-left:38px;">2022 — actualidad</div>
+      </div>
+      <div>
+        <div class="deg">Bachiller en Economía</div>
+        <div class="inst mono">Instituto Salesiano Pío XI</div>
+        <div class="yr mono">2016 — 2021</div>
+      </div>
+      <div>
+        <div class="deg">Inglés — Avanzado</div>
+        <div class="inst mono">First Certificate in English (B2), 2021</div>
+        <a class="cert-btn mono" href="https://drive.google.com/file/d/1i117uT5r6JaNgBIY5gvMon5BBV7ggPwC/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>
+          Ver certificado
+        </a>
+      </div>
+      <div>
+        <div class="deg">Portugués — Básico</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contacto">
+  <div class="wrap">
+    <h2 class="reveal">Hablemos de una oportunidad, un proyecto o una idea.</h2>
+    <div class="contact-links reveal">
+      <a class="link-anim" href="mailto:santiaborda@gmail.com">santiaborda@gmail.com</a>
+      <a class="icon-link" href="https://www.linkedin.com/in/santiago-borda-573a51395/">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+        LinkedIn
+      </a>
+      <a class="icon-link" href="https://github.com/santiago-borda">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.19c0 4.49 2.87 8.3 6.84 9.64.5.1.68-.22.68-.49 0-.24-.01-1.03-.01-1.87-2.78.51-3.5-.7-3.72-1.34-.13-.33-.68-1.34-1.16-1.61-.4-.22-.97-.76-.01-.77.9-.02 1.54.85 1.76 1.2 1.03 1.76 2.67 1.26 3.32.96.1-.76.4-1.26.73-1.55-2.55-.29-5.23-1.31-5.23-5.82 0-1.28.44-2.34 1.16-3.16-.12-.29-.5-1.48.11-3.08 0 0 .95-.31 3.12 1.21a10.6 10.6 0 0 1 2.84-.39c.96 0 1.93.13 2.84.39 2.17-1.53 3.12-1.21 3.12-1.21.61 1.6.23 2.79.11 3.08.72.82 1.16 1.87 1.16 3.16 0 4.52-2.69 5.53-5.25 5.82.42.37.78 1.09.78 2.2 0 1.59-.01 2.87-.01 3.26 0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.19C22 6.58 17.52 2 12 2z"/></svg>
+        GitHub
+      </a>
+    </div>
+    <div class="mono" style="font-size:12px;color:var(--muted);">Santiago Borda — Argentina</div>
+  </div>
+</footer>
+
+<script>
+  // Reveal al hacer scroll
+  (function(){
+    var els = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      els.forEach(function(el){ el.classList.add('is-visible'); });
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(function(el){ io.observe(el); });
+  })();
+
+  // Glow que sigue el cursor en las tarjetas de proyectos
+  (function(){
+    document.querySelectorAll('.glow-target').forEach(function(el){
+      el.addEventListener('mousemove', function(e){
+        var rect = el.getBoundingClientRect();
+        el.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+        el.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>
