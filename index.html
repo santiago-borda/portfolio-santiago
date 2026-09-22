@@ -9,6 +9,11 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Santiago Borda — Portfolio">
 <meta property="og:description" content="Ingeniería en Sistemas, QA, auditoría de procesos y desarrollo.">
+<link rel="icon" type="image/x-icon" href="/assets/logo/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/logo/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/logo/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/logo/apple-touch-icon.png">
+<link rel="manifest" href="/assets/logo/site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -54,7 +59,8 @@
     display:flex;justify-content:space-between;align-items:center;
     padding:18px clamp(24px,6vw,72px);
   }
-  nav .brand{font-size:15px;font-weight:600;}
+  nav .brand{font-size:15px;font-weight:600;display:inline-flex;align-items:center;gap:9px;}
+  nav .brand-logo-icon{width:22px;height:22px;border-radius:5px;flex-shrink:0;}
   nav .links{display:flex;gap:30px;}
   nav .links a{
     position:relative;font-size:14px;color:var(--muted);
@@ -197,7 +203,7 @@
 <div class="stripe"><span></span><span></span><span></span></div>
 
 <nav>
-  <a href="#top" class="brand">Santiago Borda</a>
+  <a href="#top" class="brand"><img src="/assets/logo/android-chrome-192x192.png" alt="Logo de Santiago Borda" class="brand-logo-icon">Santiago Borda</a>
   <div class="links">
     <a href="#experiencia">Experiencia</a>
     <a href="#proyectos">Proyectos</a>
