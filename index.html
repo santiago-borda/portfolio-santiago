@@ -52,6 +52,13 @@
   .stripe span:nth-child(2){background:var(--accent-blue);}
   .stripe span:nth-child(3){background:var(--accent-green);}
 
+  /* Barra de progreso de scroll */
+  .scroll-progress{
+    position:fixed;top:0;left:0;height:3px;width:0%;z-index:30;
+    background:linear-gradient(90deg,var(--accent),var(--accent-blue),var(--accent-green));
+    transition:width .1s linear;
+  }
+
   /* Nav */
   nav{
     position:sticky;top:0;z-index:20;width:100%;
@@ -59,7 +66,9 @@
     border-bottom:1px solid var(--border);
     display:flex;justify-content:space-between;align-items:center;
     padding:18px clamp(24px,6vw,72px);
+    transition:box-shadow .3s ease, background .3s ease;
   }
+  nav.nav-scrolled{box-shadow:0 8px 24px -16px rgba(0,0,0,0.5);background:rgba(24,29,38,0.95);}
   nav .brand{font-size:15px;font-weight:600;display:inline-flex;align-items:center;gap:9px;}
   nav .brand-logo-icon{width:22px;height:22px;border-radius:5px;flex-shrink:0;}
   nav .links{display:flex;gap:30px;}
@@ -73,6 +82,8 @@
   }
   nav .links a:hover{color:var(--paper);}
   nav .links a:hover::after{width:100%;}
+  nav .links a.active{color:var(--paper);}
+  nav .links a.active::after{width:100%;}
 
   /* Menú desplegable en mobile */
   nav .menu-toggle{
@@ -146,12 +157,19 @@
     background:var(--card);padding:30px;
     transition:transform .35s cubic-bezier(.2,.7,.3,1), background .35s ease, box-shadow .35s ease;
     position:relative;overflow:hidden;
+    transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(0);
+    transform-style:preserve-3d;
   }
-  .card:hover{transform:translateY(-4px);background:#242B36;box-shadow:0 18px 32px -20px rgba(0,0,0,0.6);}
+  .card:hover{
+    transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-4px);
+    background:#242B36;box-shadow:0 18px 32px -20px rgba(0,0,0,0.6);
+  }
   .card .tag{font-size:11px;letter-spacing:.02em;}
   .card .name{font-size:17px;font-weight:600;margin:12px 0 10px;}
   .card p{margin:0;font-size:14px;line-height:1.7;color:var(--muted);}
-  .card .see{display:inline-block;margin-top:14px;font-size:13px;}
+  .card .see{display:inline-block;margin-top:14px;font-size:13px;position:relative;padding-right:14px;}
+  .card .see::after{content:"→";position:absolute;right:0;top:0;transition:transform .25s ease;}
+  .card .see:hover::after{transform:translateX(4px);}
   .tag-blue{color:var(--accent-blue);} .tag-green{color:var(--accent-green);} .tag-amber{color:var(--accent);}
   .card.blue{border-top:3px solid var(--accent-blue);}
   .card.green{border-top:3px solid var(--accent-green);}
@@ -208,7 +226,8 @@
     font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;
     letter-spacing:.01em;
   }
-  .brand-logo{height:34px;width:auto;flex-shrink:0;display:block;}
+  .brand-logo{height:34px;width:auto;flex-shrink:0;display:block;transition:transform .3s ease;}
+  .role:hover .brand-logo{transform:scale(1.08);}
   .brand-logo.kiu{height:30px;}
   .brand-logo.bordevs{height:26px;}
   .role .org-line{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
@@ -222,13 +241,15 @@
     border:1px solid var(--border-strong);color:var(--paper);
     transition:color .25s ease, border-color .25s ease, background .25s ease, transform .2s ease;
   }
-  .cert-btn svg{width:14px;height:14px;flex-shrink:0;}
+  .cert-btn svg{width:14px;height:14px;flex-shrink:0;transition:transform .25s ease;}
   .cert-btn:hover{color:var(--accent);border-color:var(--accent);background:rgba(227,165,72,0.08);transform:translateY(-2px);}
+  .cert-btn:hover svg{transform:translateX(2px);}
 </style>
 </head>
 <body>
 
 <div class="stripe"><span></span><span></span><span></span></div>
+<div class="scroll-progress" id="scroll-progress"></div>
 
 <nav id="site-nav">
   <a href="#top" class="brand"><img src="/assets/logo/android-chrome-192x192.png" alt="Logo de Santiago Borda" class="brand-logo-icon">Santiago Borda</a>
@@ -468,15 +489,62 @@
     links.forEach(function(a){ a.addEventListener('click', closeMenu); });
   })();
 
-  // Glow que sigue el cursor en las tarjetas de proyectos
+  // Glow + tilt 3D que sigue el cursor en las tarjetas de proyectos
   (function(){
     document.querySelectorAll('.glow-target').forEach(function(el){
       el.addEventListener('mousemove', function(e){
         var rect = el.getBoundingClientRect();
-        el.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
-        el.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+        var x = e.clientX - rect.left, y = e.clientY - rect.top;
+        el.style.setProperty('--mx', x + 'px');
+        el.style.setProperty('--my', y + 'px');
+        var midX = rect.width / 2, midY = rect.height / 2;
+        var ry = ((x - midX) / midX) * 5;
+        var rx = -((y - midY) / midY) * 5;
+        el.style.setProperty('--rx', rx.toFixed(2) + 'deg');
+        el.style.setProperty('--ry', ry.toFixed(2) + 'deg');
+      });
+      el.addEventListener('mouseleave', function(){
+        el.style.setProperty('--rx', '0deg');
+        el.style.setProperty('--ry', '0deg');
       });
     });
+  })();
+
+  // Barra de progreso de scroll + nav elevado al bajar
+  (function(){
+    var bar = document.getElementById('scroll-progress');
+    var nav = document.getElementById('site-nav');
+    var ticking = false;
+    function update(){
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var height = document.documentElement.scrollHeight - window.innerHeight;
+      var pct = height > 0 ? (scrollTop / height) * 100 : 0;
+      bar.style.width = pct + '%';
+      nav.classList.toggle('nav-scrolled', scrollTop > 8);
+      ticking = false;
+    }
+    window.addEventListener('scroll', function(){
+      if (!ticking) { window.requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+    update();
+  })();
+
+  // Resaltar el link del nav según la sección visible
+  (function(){
+    var sections = document.querySelectorAll('section[id]');
+    var navLinks = document.querySelectorAll('nav .links a');
+    if (!('IntersectionObserver' in window) || !sections.length) return;
+    var map = {};
+    navLinks.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        var link = map[entry.target.id];
+        if (!link || !entry.isIntersecting) return;
+        navLinks.forEach(function(a){ a.classList.remove('active'); });
+        link.classList.add('active');
+      });
+    }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+    sections.forEach(function(s){ io.observe(s); });
   })();
 </script>
 
