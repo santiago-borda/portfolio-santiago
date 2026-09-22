@@ -39,6 +39,7 @@
     color:var(--paper);
     font-family:'Space Grotesk',sans-serif;
     -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
   }
   a{color:var(--paper);text-decoration:none;}
   .mono{font-family:'IBM Plex Mono',monospace;}
@@ -73,9 +74,31 @@
   nav .links a:hover{color:var(--paper);}
   nav .links a:hover::after{width:100%;}
 
+  /* Menú desplegable en mobile */
+  nav .menu-toggle{
+    display:none;background:none;border:none;color:var(--paper);
+    padding:6px;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  }
+  nav .menu-toggle svg{width:22px;height:22px;display:block;}
+  nav .menu-toggle .icon-close{display:none;}
+  nav.open .menu-toggle .icon-open{display:none;}
+  nav.open .menu-toggle .icon-close{display:block;}
+
+  @media (max-width:720px){
+    nav{padding:16px 20px;flex-wrap:wrap;}
+    nav .menu-toggle{display:flex;align-items:center;justify-content:center;}
+    nav .links{
+      order:3;width:100%;flex-direction:column;gap:0;
+      max-height:0;overflow:hidden;
+      transition:max-height .35s ease;
+    }
+    nav.open .links{max-height:320px;margin-top:16px;}
+    nav .links a{padding:14px 4px;border-top:1px solid var(--border);font-size:15px;}
+  }
+
   section, header, footer{
     width:100%;box-sizing:border-box;
-    padding:88px clamp(24px,6vw,72px);
+    padding:clamp(56px,12vw,88px) clamp(20px,6vw,72px);
   }
   .wrap{max-width:920px;margin:0 auto;}
   h2{margin:0 0 44px;font-size:22px;font-weight:600;}
@@ -107,6 +130,10 @@
   .role .title{font-size:17px;font-weight:600;margin-bottom:4px;}
   .role .org{font-size:14px;color:var(--accent);margin-bottom:14px;}
   .role ul{margin:0;padding-left:18px;color:var(--muted);font-size:15px;line-height:1.8;}
+  @media (max-width:600px){
+    .role{flex-direction:column;gap:8px;}
+    .role .when{width:auto;}
+  }
 
   /* Proyectos */
   #proyectos{background:var(--panel-2);}
@@ -132,7 +159,8 @@
 
   /* Stack */
   .cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:32px;}
-  @media (max-width:720px){ .cols{grid-template-columns:1fr 1fr;} }
+  @media (max-width:720px){ .cols{grid-template-columns:1fr 1fr;gap:28px 20px;} }
+  @media (max-width:420px){ .cols{grid-template-columns:1fr;} }
   .cols h4{font-size:12px;color:var(--muted);margin:0 0 14px;font-weight:500;}
   .cols div p{font-size:15px;line-height:2;margin:0;}
 
@@ -202,9 +230,13 @@
 
 <div class="stripe"><span></span><span></span><span></span></div>
 
-<nav>
+<nav id="site-nav">
   <a href="#top" class="brand"><img src="/assets/logo/android-chrome-192x192.png" alt="Logo de Santiago Borda" class="brand-logo-icon">Santiago Borda</a>
-  <div class="links">
+  <button class="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-links">
+    <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <div class="links" id="nav-links">
     <a href="#experiencia">Experiencia</a>
     <a href="#proyectos">Proyectos</a>
     <a href="#stack">Stack</a>
@@ -217,7 +249,7 @@
   <div class="wrap reveal">
     <div class="status-line">
       <span class="dot"></span>
-      <span class="mono" style="font-size:13px;color:var(--muted);">Trainee de Mejora Continua — Performance and Delivery, KIU System Solutions</span>
+      <span class="mono" style="font-size:13px;color:var(--muted);">Trainee de Mejora Continua — Performance & Delivery, KIU System Solutions</span>
     </div>
     <h1>Ingeniería, calidad y procesos que sostienen sistemas críticos.</h1>
     <p class="lede">Estudiante avanzado de Ingeniería en Sistemas de la Información, con experiencia aplicada en aseguramiento de calidad, auditoría de procesos y automatización. Trabajo hoy en la industria de tecnología aplicada a la aviación (industria aerocomercial) y de viajes combinando gestión de proyectos, auditoría ITSM y documentación de testing con desarrollo propio de software.</p>
@@ -245,7 +277,7 @@
         <div class="title">Trainee de Mejora Continua</div>
         <div class="org-line">
           <img class="brand-logo kiu" src="assets/kiu-logo.png" alt="Logo de KIU System Solutions">
-          <div class="org">KIU System Solutions — Performance and Delivery</div>
+          <div class="org">KIU System Solutions — Performance & Delivery</div>
         </div>
         <ul>
           <li>Gestión de proyectos internos como Project Manager, coordinando entregas entre equipos técnicos y de negocio.</li>
@@ -416,6 +448,24 @@
       });
     }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
     els.forEach(function(el){ io.observe(el); });
+  })();
+
+  // Menú desplegable en mobile
+  (function(){
+    var nav = document.getElementById('site-nav');
+    var toggle = nav.querySelector('.menu-toggle');
+    var links = nav.querySelectorAll('.links a');
+    function closeMenu(){
+      nav.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Abrir menú');
+    }
+    toggle.addEventListener('click', function(){
+      var isOpen = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      toggle.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Abrir menú');
+    });
+    links.forEach(function(a){ a.addEventListener('click', closeMenu); });
   })();
 
   // Glow que sigue el cursor en las tarjetas de proyectos
